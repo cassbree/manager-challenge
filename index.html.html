@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manager Challenge — Situational Leadership Essentials</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #ffffff; --bg2: #f5f5f7; --bg3: #ebebed;
+    --text: #1d1d1f; --text2: #6e6e73; --text3: #aeaeb2;
+    --border: #d2d2d7; --border2: #e5e5ea;
+    --blue: #185FA5; --blue-light: #E6F1FB; --blue-text: #0C447C;
+    --green: #27500A; --green-light: #EAF3DE; --green-mid: #639922;
+    --amber: #633806; --amber-light: #FAEEDA; --amber-mid: #BA7517;
+    --red: #791F1F; --red-light: #FCEBEB; --red-mid: #A32D2D;
+    --teal: #085041; --teal-light: #E1F5EE;
+    --purple: #3C3489; --purple-light: #EEEDFE;
+    --orange: #D85A30;
+    --radius: 12px; --radius-sm: 8px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg2); color: var(--text); min-height: 100vh; }
+  .app { max-width: 720px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+  .card { background: var(--bg); border: 0.5px solid var(--border2); border-radius: var(--radius); padding: 1.25rem; margin-bottom: 1rem; box-shadow: var(--shadow); }
+  .badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 99px; }
+  .badge-blue { background: var(--blue-light); color: var(--blue-text); }
+  .badge-green { background: var(--green-light); color: var(--green); }
+  .badge-neutral { background: var(--bg3); color: var(--text2); }
+  h1 { font-size: 26px; font-weight: 600; color: var(--text); margin-bottom: 0.5rem; }
+  h2 { font-size: 20px; font-weight: 500; color: var(--text); margin-bottom: 0.5rem; }
+  h3 { font-size: 16px; font-weight: 500; color: var(--text); margin-bottom: 0.4rem; }
+  p { font-size: 14px; line-height: 1.7; color: var(--text); }
+  .muted { color: var(--text2); font-size: 13px; }
+  .small { font-size: 12px; }
+  .section-label { font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.5rem; }
+  .bar { border-radius: var(--radius-sm); padding: 0.65rem 1rem; font-size: 12px; font-weight: 500; display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+  .bar-blue { background: var(--blue); color: #E6F1FB; }
+  .bar-green { background: #1D9E75; color: var(--teal-light); }
+  .progress-wrap { background: var(--bg3); border-radius: 99px; height: 4px; margin-bottom: 1.5rem; }
+  .progress-fill { height: 4px; border-radius: 99px; background: var(--blue); transition: width 0.4s; }
+  .shift-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 0.75rem; }
+  .shift-col { background: var(--bg2); border-radius: var(--radius-sm); padding: 0.85rem 1rem; }
+  .shift-before { border-left: 3px solid var(--green-mid); }
+  .shift-after { border-left: 3px solid var(--orange); }
+  .shift-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.5rem; }
+  .shift-label-b { color: var(--green); }
+  .shift-label-a { color: var(--orange); }
+  .shift-sublabel { font-size: 11px; color: var(--text2); margin-bottom: 0.5rem; }
+  .shift-item { font-size: 13px; line-height: 1.6; color: var(--text); margin-bottom: 0.35rem; padding-left: 0.75rem; position: relative; }
+  .shift-item::before { content:''; position:absolute; left:0; top:8px; width:4px; height:4px; border-radius:50%; background:var(--text3); }
+  .quote-box { background: var(--bg2); border-radius: var(--radius-sm); padding: 0.85rem 1rem; margin-bottom: 0.75rem; border-left: 3px solid var(--purple); font-size: 13px; font-style: italic; color: var(--text); }
+  .quote-attr { font-style: normal; font-size: 11px; color: var(--text2); }
+  .context-note { background: var(--bg2); border-radius: var(--radius-sm); padding: 0.6rem 1rem; margin-bottom: 0.75rem; font-size: 13px; color: var(--text2); border-left: 3px solid var(--border); }
+  .behavior-tag { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 99px; margin: 2px; }
+  .bt-good { background: var(--green-light); color: var(--green); }
+  .bt-bad { background: var(--red-light); color: var(--red); }
+  .step-hd { display: flex; align-items: center; gap: 10px; margin-bottom: 0.75rem; }
+  .step-n { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; flex-shrink: 0; }
+  .step-n-active { background: var(--blue); color: white; }
+  .step-n-done { background: var(--green-mid); color: white; }
+  .step-n-locked { background: var(--bg3); color: var(--text2); border: 0.5px solid var(--border); }
+  .choice-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 0.75rem; }
+  .choice-grid-1 { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 0.75rem; }
+  .choice-btn { padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); cursor: pointer; text-align: left; font-size: 13px; color: var(--text); transition: all 0.12s; line-height: 1.5; font-family: inherit; }
+  .choice-btn:hover { background: var(--bg2); border-color: var(--blue); }
+  .choice-btn.sel-blue { border-color: var(--blue); background: var(--blue-light); color: var(--blue-text); }
+  .choice-btn.sel-green { border-color: var(--green-mid); background: var(--green-light); color: var(--green); }
+  .choice-btn-title { font-weight: 500; margin-bottom: 2px; }
+  .choice-btn-sub { font-size: 11px; color: var(--text2); }
+  .choice-btn.sel-blue .choice-btn-sub { color: var(--blue-text); opacity: 0.8; }
+  .choice-btn.sel-green .choice-btn-sub { color: var(--green); opacity: 0.8; }
+  .btn { display: inline-block; padding: 0.6rem 1.25rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); cursor: pointer; font-size: 14px; font-weight: 500; color: var(--text); transition: all 0.12s; font-family: inherit; }
+  .btn:hover { background: var(--bg2); }
+  .btn-primary { background: var(--blue); color: white; border-color: var(--blue); }
+  .btn-primary:hover { background: var(--blue-text); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-row { display: flex; gap: 10px; justify-content: flex-end; margin-top: 1rem; flex-wrap: wrap; }
+  .fb-box { border-radius: var(--radius-sm); padding: 1rem 1.1rem; margin-bottom: 0.75rem; font-size: 13px; line-height: 1.6; }
+  .fb-correct { background: var(--green-light); border-left: 3px solid var(--green-mid); color: #173404; }
+  .fb-partial { background: var(--amber-light); border-left: 3px solid var(--amber-mid); color: #412402; }
+  .fb-wrong { background: var(--red-light); border-left: 3px solid var(--red-mid); color: #501313; }
+  .fb-heading { font-weight: 600; margin-bottom: 0.75rem; font-size: 14px; }
+  .fb-row { margin-bottom: 0.6rem; }
+  .fb-row-head { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
+  .fb-row-name { font-size: 12px; font-weight: 500; }
+  .fb-row-text { font-size: 12px; color: var(--text2); padding-left: 16px; }
+  .divider { border: none; border-top: 0.5px solid var(--border2); margin: 0.9rem 0; }
+  .tip-box { border-radius: var(--radius-sm); padding: 0.7rem 0.9rem; font-size: 12px; margin-bottom: 0.75rem; border-left: 3px solid var(--amber-mid); background: var(--amber-light); color: var(--amber); }
+  .score-ring { width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 600; margin: 0 auto 0.75rem; }
+  .avatar { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600; flex-shrink: 0; }
+  .rj { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; margin-top: 6px; }
+  .rj-node { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 99px; }
+  .rj-arrow { color: var(--text3); font-size: 11px; }
+  .ref-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .ref-item { font-size: 11px; padding: 6px 8px; border-radius: var(--radius-sm); line-height: 1.4; }
+  .mode-card { border-radius: var(--radius); padding: 1.5rem; cursor: pointer; border: 2px solid transparent; transition: all 0.15s; background: var(--bg); box-shadow: var(--shadow); text-align: center; }
+  .mode-card:hover { border-color: var(--blue); }
+  .mode-emoji { font-size: 32px; margin-bottom: 0.5rem; }
+  .mode-title { font-weight: 600; font-size: 16px; margin-bottom: 0.25rem; }
+  .lb-row { display: flex; align-items: center; gap: 12px; padding: 0.75rem 1rem; border-radius: var(--radius-sm); margin-bottom: 6px; background: var(--bg2); }
+  .lb-input { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 6px 10px; font-size: 14px; background: var(--bg); color: var(--text); font-family: inherit; }
+  .debrief-q { background: var(--bg2); border-radius: var(--radius-sm); padding: 0.75rem 1rem; margin-bottom: 0.5rem; font-size: 13px; color: var(--text); border-left: 3px solid var(--blue); }
+  .debrief-note { font-size: 12px; color: var(--text2); padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); background: var(--bg2); margin-bottom: 1rem; }
+  .tab-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.25rem; }
+  .tab-btn { padding: 5px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg); font-size: 13px; cursor: pointer; color: var(--text2); font-family: inherit; transition: all 0.12s; }
+  .tab-btn.active { background: var(--blue); color: white; border-color: var(--blue); }
+  .scenario-card { border: 1px solid var(--border2); border-radius: var(--radius); padding: 1.1rem 1.25rem; margin-bottom: 0.75rem; background: var(--bg); box-shadow: var(--shadow); transition: border-color 0.15s; }
+  .scenario-card.active-sc { border: 2px solid var(--blue); }
+  @media (max-width: 540px) {
+    .shift-grid { grid-template-columns: 1fr; }
+    .ref-grid { grid-template-columns: 1fr; }
+    .choice-grid-2 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- MODE SELECT -->
+<div id="screen-mode" class="screen active">
+  <div style="padding:2rem 0 1rem;">
+    <div class="section-label" style="margin-bottom:0.75rem;">Situational Leadership Essentials</div>
+    <h1 style="margin-bottom:0.5rem;">Manager Challenge</h1>
+    <p class="muted" style="margin-bottom:2rem;max-width:480px;">Select your role to begin. Facilitators control the session and scoring. Teams diagnose from what they observe — no hints, no labels.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:520px;">
+      <div class="mode-card" onclick="showScreen('screen-facilitator')">
+        <div class="mode-emoji">🎓</div>
+        <div class="mode-title">Facilitator</div>
+        <div class="muted small">Control scenarios, view reference, manage leaderboard</div>
+      </div>
+      <div class="mode-card" onclick="showScreen('screen-team-home')">
+        <div class="mode-emoji">👥</div>
+        <div class="mode-title">Team</div>
+        <div class="muted small">Play the active scenario — diagnose from what you observe</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FACILITATOR HOME -->
+<div id="screen-facilitator" class="screen">
+  <div class="bar bar-blue">
+    <span>Facilitator console</span>
+    <span id="fac-status">No scenario active</span>
+  </div>
+  <div class="card" style="margin-bottom:1rem;">
+    <div class="section-label" style="margin-bottom:0.75rem;">Readiness level reference — facilitator only</div>
+    <div class="ref-grid" style="margin-bottom:0.75rem;">
+      <div class="ref-item" style="background:var(--blue-light);color:var(--blue-text);"><strong>R1</strong> — Unable &amp; unwilling/insecure. New to this situation.</div>
+      <div class="ref-item" style="background:var(--amber-light);color:var(--amber);"><strong>R2</strong> — Unable but willing. Trying, not yet proven consistent.</div>
+      <div class="ref-item" style="background:var(--teal-light);color:var(--teal);"><strong>R3</strong> — Able but unwilling/insecure. Proven, now wavering.</div>
+      <div class="ref-item" style="background:var(--green-light);color:var(--green);"><strong>R4</strong> — Able &amp; willing. Consistent and self-directed.</div>
+    </div>
+    <div class="ref-grid">
+      <div class="ref-item" style="background:var(--bg2);color:var(--text2);"><strong>S1 Directing</strong> — matches R1.</div>
+      <div class="ref-item" style="background:var(--bg2);color:var(--text2);"><strong>S2 Coaching</strong> — matches R2.</div>
+      <div class="ref-item" style="background:var(--bg2);color:var(--text2);"><strong>S3 Supporting</strong> — matches R3.</div>
+      <div class="ref-item" style="background:var(--bg2);color:var(--text2);"><strong>S4 Delegating</strong> — matches R4.</div>
+    </div>
+  </div>
+  <div class="section-label" style="margin-bottom:0.75rem;">Scenarios — release one at a time</div>
+  <div id="fac-scenario-list" style="margin-bottom:1.5rem;"></div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;">
+    <button class="btn" onclick="showScreen('screen-leaderboard')">Leaderboard</button>
+    <button class="btn" onclick="showScreen('screen-debrief')">Debrief guide</button>
+    <button class="btn" onclick="showScreen('screen-mode')">← Mode select</button>
+  </div>
+</div>
+
+<!-- TEAM HOME -->
+<div id="screen-team-home" class="screen">
+  <div class="bar bar-green">
+    <span>Team view</span>
+    <button style="background:none;border:none;color:var(--teal-light);font-size:12px;cursor:pointer;font-family:inherit;" onclick="showScreen('screen-mode')">← Switch mode</button>
+  </div>
+  <h2 style="margin-bottom:0.5rem;">Manager Challenge</h2>
+  <p class="muted" style="margin-bottom:1.5rem;max-width:480px;">Wait for your facilitator to release a scenario. At each checkpoint, read the shift carefully and discuss with your group before selecting.</p>
+  <div class="card" style="margin-bottom:1rem;">
+    <div class="section-label" style="margin-bottom:0.5rem;">At each checkpoint you will</div>
+    <p style="font-size:13px;color:var(--text2);line-height:1.9;">
+      1. See what the situation looked like <strong style="color:var(--text);">before</strong> and what has <strong style="color:var(--text);">changed</strong><br>
+      2. Decide if this is <strong style="color:var(--text);">development</strong> or <strong style="color:var(--text);">regression</strong><br>
+      3. Identify the <strong style="color:var(--text);">type of change</strong> driving it<br>
+      4. Diagnose the <strong style="color:var(--text);">readiness level</strong> from what you observe<br>
+      5. Choose the right <strong style="color:var(--text);">leadership approach</strong>
+    </p>
+  </div>
+  <div id="team-scenario-status" class="card" style="text-align:center;padding:2rem;"><div id="team-status-content"></div></div>
+  <button class="btn" onclick="showScreen('screen-mode')">← Back</button>
+</div>
+
+<!-- GAME -->
+<div id="screen-game" class="screen">
+  <div class="bar bar-green">
+    <span id="game-scenario-name"></span>
+    <span id="game-cp-badge" class="badge" style="background:rgba(255,255,255,0.2);color:var(--teal-light);"></span>
+  </div>
+  <div class="progress-wrap"><div id="progress-fill" class="progress-fill" style="width:0%"></div></div>
+  <div id="employee-card" class="card"></div>
+  <div id="context-area"></div>
+  <div id="events-card" class="card"></div>
+  <div id="step1-card" class="card">
+    <div class="step-hd"><div class="step-n step-n-active" id="s1-num">1</div><div><h3 style="margin:0 0 2px;">Development or regression?</h3><p class="muted small">Based on the shift — which is this?</p></div></div>
+    <div id="tip-r2r3" class="tip-box" style="display:none;"><strong>Discuss:</strong> Has the ability changed, or has the motivation and confidence shifted? Those point in different directions.</div>
+    <div class="choice-grid-2" id="devReg-grid"></div>
+  </div>
+  <div id="step2-card" class="card" style="display:none;">
+    <div class="step-hd"><div class="step-n step-n-locked" id="s2-num">2</div><div><h3 style="margin:0 0 2px;">What type of change is involved?</h3><p class="muted small">If no change event, select "No change event."</p></div></div>
+    <div class="choice-grid-2" id="changeType-grid"></div>
+  </div>
+  <div id="step3-card" class="card" style="display:none;">
+    <div class="step-hd"><div class="step-n step-n-locked" id="s3-num">3</div><div><h3 style="margin:0 0 2px;">What is their readiness level?</h3><p class="muted small">Deduce from the shift — discuss before selecting.</p></div></div>
+    <div class="choice-grid-2" id="readiness-grid"></div>
+  </div>
+  <div id="step4-card" class="card" style="display:none;">
+    <div class="step-hd"><div class="step-n step-n-locked" id="s4-num">4</div><div><h3 style="margin:0 0 2px;">What leadership approach will you use?</h3><p class="muted small">What does this person need from you right now?</p></div></div>
+    <div class="choice-grid-1" id="style-grid"></div>
+  </div>
+  <div id="feedback-area" style="display:none;"></div>
+  <div class="btn-row">
+    <button class="btn" onclick="showScreen('screen-team-home')">Exit</button>
+    <button class="btn" id="submit-btn" onclick="submitAnswer()" disabled>Submit →</button>
+    <button class="btn btn-primary" id="next-btn" style="display:none;" onclick="nextCheckpoint()">Next checkpoint →</button>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="screen-results" class="screen">
+  <div class="bar bar-green">Scenario complete</div>
+  <div style="text-align:center;padding:1.5rem 0;">
+    <h2 style="margin-bottom:0.25rem;">Well done!</h2>
+    <p id="results-sub" class="muted" style="margin-bottom:1.25rem;"></p>
+    <div id="score-display" class="score-ring"></div>
+    <p id="score-label" style="font-size:13px;color:var(--text2);margin-bottom:1rem;"></p>
+    <div class="card" style="max-width:340px;margin:0 auto 1.5rem;text-align:center;">
+      <div class="section-label" style="margin-bottom:0.25rem;">Report this score to your facilitator</div>
+      <div id="final-score-display" style="font-size:32px;font-weight:600;color:var(--blue);"></div>
+      <div id="final-score-max" class="muted"></div>
+    </div>
+    <div id="results-breakdown" style="text-align:left;max-width:580px;margin:0 auto;"></div>
+    <button class="btn" style="margin-top:1.25rem;" onclick="showScreen('screen-team-home')">Back to team home</button>
+  </div>
+</div>
+
+<!-- LEADERBOARD -->
+<div id="screen-leaderboard" class="screen">
+  <div class="bar bar-blue">Facilitator — leaderboard</div>
+  <h2 style="margin-bottom:0.25rem;">Team leaderboard</h2>
+  <p class="muted" style="margin-bottom:1.25rem;">Enter scores as teams report them. Rankings update automatically.</p>
+  <div id="lb-scenario-scores" style="margin-bottom:1rem;"></div>
+  <div class="card"><div class="section-label" style="margin-bottom:0.75rem;">Overall standings</div><div id="lb-overall"></div></div>
+  <div style="display:flex;gap:10px;margin-top:1rem;">
+    <button class="btn" onclick="showScreen('screen-facilitator')">← Back</button>
+    <button class="btn" onclick="showScreen('screen-debrief')">Debrief guide →</button>
+  </div>
+</div>
+
+<!-- DEBRIEF -->
+<div id="screen-debrief" class="screen">
+  <div class="bar bar-blue">Facilitator — debrief guide</div>
+  <h2 style="margin-bottom:0.25rem;">Debrief talking points</h2>
+  <p class="muted" style="margin-bottom:1.25rem;">Use after each scenario or as a closing debrief across all three.</p>
+  <div class="tab-row" id="debrief-tabs"></div>
+  <div id="debrief-content"></div>
+  <div style="display:flex;gap:10px;margin-top:1rem;">
+    <button class="btn" onclick="showScreen('screen-facilitator')">← Back</button>
+    <button class="btn" onclick="showScreen('screen-leaderboard')">Leaderboard →</button>
+  </div>
+</div>
+
+<script>
+const CT=[
+  {id:'personal',label:'Personal change',desc:'Private life event — others may be unaware'},
+  {id:'professional',label:'Professional change',desc:'Role, scope, or responsibilities shifted'},
+  {id:'organizational',label:'Organizational change',desc:'Company-wide event outside their control'},
+  {id:'none',label:'No change event',desc:'Natural development progress'}
+];
+const RL=[{id:'R1',label:'R1'},{id:'R2',label:'R2'},{id:'R3',label:'R3'},{id:'R4',label:'R4'}];
+const LS=[
+  {id:'S1',label:'S1 — Directing',desc:'High task focus, low relationship. Close supervision and clear instruction.'},
+  {id:'S2',label:'S2 — Coaching',desc:'High task focus, high relationship. Guide skill-building while encouraging.'},
+  {id:'S3',label:'S3 — Supporting',desc:'Low task focus, high relationship. Listen, involve, build confidence.'},
+  {id:'S4',label:'S4 — Delegating',desc:'Low task focus, low relationship. Full autonomy with light-touch monitoring.'}
+];
+
+const SCENARIOS=[
+  {
+    id:'alex',title:"Alex's Pivot",tagline:'Expert engineer → new leader → regression → rebuilding',
+    av:'AK',ac:{bg:'#E6F1FB',tx:'#0C447C'},role:'Senior Software Engineer → Engineering Lead',
+    rj:[{l:'R4',bg:'#EAF3DE',tx:'#27500A'},{l:'R1',bg:'#E6F1FB',tx:'#0C447C'},{l:'R3',bg:'#E1F5EE',tx:'#085041'},{l:'R2',bg:'#FAEEDA',tx:'#633806'}],
+    debrief:{
+      opening:"Alex's scenario is built around observable shifts. The journey is non-linear — peak performance in one area doesn't automatically carry over when responsibilities change, and regression can hit even a growing leader when the organisation shifts around them.",
+      questions:[
+        {q:"At checkpoint 1 to 2, how did the shift in Alex's behavior tell you this was a new starting point rather than a performance problem?",note:"The before showed mastery — autonomous, proactive, no guidance needed. The after showed someone who tried and struggled with genuinely new responsibilities. The shift wasn't downward from a shared baseline; it was into new territory. How often do we treat a promotion stumble as a performance issue rather than a development need?"},
+        {q:"At checkpoint 2 to 3, Alex had been growing well. What specific signals in the 'after' told you this was regression rather than a harder development challenge?",note:"The canceled 1:1s, the missed deadline, the deflection of team questions — these are engagement signals, not skill signals. Capability present, engagement absent — that's the regression pattern."},
+        {q:"At checkpoint 3 to 4, Alex was motivated again but struggling with new team members. Why is this a different situation than checkpoint 2?",note:"At checkpoint 2, Alex was still building foundational skills. At checkpoint 4, those skills exist — they just haven't transferred to this specific group yet. The foundation is real. The application to this new context is unproven."}
+      ],
+      keyInsight:"Every checkpoint has a visible before and after. That's what makes the diagnosis possible — not gut instinct, but observable shifts. Train yourself to ask: compared to what? What changed? That's where the diagnosis starts."
+    },
+    checkpoints:[
+      {
+        title:'Checkpoint 1: The promotion is announced',
+        context:'Alex has just been promoted from Senior Engineer to Engineering Lead.',
+        r2r3:false,
+        before:{sub:'Until last week — Alex as Senior Engineer',items:['Consistently delivered releases on time — four in a row, under budget','Other engineers brought their hardest problems to Alex first','Caught critical bugs proactively; needed little direction or oversight','Full autonomy — you rarely needed to follow up']},
+        after:{sub:'This week — first days as Engineering Lead',items:['Visibly excited: "I\'ve been waiting for this opportunity"','Reorganised the team\'s Slack channels and shared drive on day one','First 1:1 with a direct report — conversation was stilted and surface-level','A performance issue with a close friend on the team went unaddressed all week']},
+        quote:{sp:'Alex, in your check-in',tx:'"I know the technical side inside out — but this people stuff is harder than I expected. I\'m not sure I\'m doing the 1:1s right."'},
+        beh:{fav:['Enthusiastic','Proactive'],fal:['Cautious','Avoiding']},
+        cDR:'development',cCT:'professional',cRL:'R1',cLS:'S1',
+        fbDR:{development:'Correct. The before shows mastery of one set of responsibilities. The after shows someone enthusiastic but struggling with a genuinely new set. There is no prior performance in this new area to regress from.',regression:'Regression requires a prior performance peak on these specific responsibilities that has slipped. The after is Alex\'s very first attempt at leading people.'},
+        fbCT:{none:'The promotion created this situation — it introduced entirely new responsibilities and a genuine skill gap.',personal:'The change is work-related.',professional:'Correct. A promotion into people management is professional change — new responsibilities requiring skills Alex has never had to develop before.',organizational:'The change is specific to Alex\'s new role.'},
+        fbRL:{R1:'Correct. The before shows mastery of one area. The after shows high motivation but no demonstrated ability in the new responsibilities — awkward 1:1s, an avoided conversation.',R2:'The after shows Alex at the very start — one awkward 1:1 and one avoided conversation aren\'t evidence of developing skill.',R3:'This would require proven ability in the new responsibilities. The after makes clear Alex has none yet.',R4:'The mastery in the before is about a different set of responsibilities entirely.'},
+        fbLS:{S1:'Correct. When someone is genuinely new to a set of responsibilities, they need clear structure and close guidance. Give Alex concrete frameworks — how to run a 1:1, how to approach a performance conversation.',S2:'This assumes some ability is already developing. Get the foundations in place first.',S3:'This assumes skills Alex doesn\'t have yet.',S4:'Stepping back entirely when someone has never done this before sets the team up to absorb the consequences.'}
+      },
+      {
+        title:'Checkpoint 2: Three months in — growing, then a stumble',
+        context:'Alex has been in the Engineering Lead role for three months.',
+        r2r3:true,
+        before:{sub:'Weeks 4–10 — Alex finding a rhythm',items:['1:1s became structured — Alex was using the framework you provided','Successfully addressed a lateness issue with a team member','Team starting to respond positively; one engineer said "Alex actually listens"','You reduced check-in frequency as Alex gained confidence']},
+        after:{sub:'This week — a difficult conversation went wrong',items:['Had to deliver critical feedback to a senior engineer — the engineer pushed back hard','Alex backed down mid-conversation and agreed to an unrealistic timeline','Now visibly avoiding that engineer in stand-ups','Said nothing about it in your weekly check-in until you asked directly']},
+        quote:{sp:'Alex, when you followed up',tx:'"I just froze when they pushed back. I knew what I should have said but I couldn\'t make myself say it. Maybe I\'m not ready for this."'},
+        beh:{fav:['Receptive','Prepared'],fal:['Inconsistent','Cautious','Avoiding']},
+        cDR:'development',cCT:'none',cRL:'R2',cLS:'S2',
+        fbDR:{development:'Correct. The before shows real progress — structured 1:1s, a successful performance conversation, growing team trust. The after shows a stumble on a harder challenge. This is a developing skill meeting its limits under pressure.',regression:'Regression would mean Alex had mastered this and then slipped back. The before shows Alex was still building — not yet at a consistent peak.'},
+        fbCT:{none:'Correct. No external change event — a difficult conversation is a harder version of the challenge Alex is still developing.',personal:'No personal event indicated.',professional:'Alex\'s responsibilities haven\'t changed.',organizational:'No org change driving this.'},
+        fbRL:{R1:'The before shows Alex has moved past the very beginning — structured 1:1s and one successful conversation show developing skill.',R2:'Correct. The before shows real progress; the after shows the skill isn\'t consistent yet under pressure. The confidence dip after the stumble is part of this pattern too.',R3:'This would require proven, consistent ability. The before showed developing ability — not yet a proven track record.',R4:'Alex is seeking reassurance and avoiding a colleague — not self-directing.'},
+        fbLS:{S1:'Directing alone misses the emotional hit Alex has taken. Guidance is needed — but so is encouragement.',S2:'Correct. Debrief the conversation together: what happened, what Alex could try differently. Acknowledge the progress shown in the before.',S3:'Alex still needs active skill-building guidance. Stepping back now would leave Alex to spiral.',S4:'This stumble signals the skill needs more development, not less support.'}
+      },
+      {
+        title:'Checkpoint 3: Six months in — reorg hits',
+        context:'Alex has been leading the team for six months. A company-wide reorganisation was just announced.',
+        r2r3:true,
+        before:{sub:'Last month — Alex operating confidently',items:['Handling performance conversations independently — no debrief needed','Team engagement scores up 18% since Alex took over','Proactively flagged a team workload issue before it became a problem','You had started delegating team planning decisions to Alex']},
+        after:{sub:'This week — since the reorg announcement',items:['Stopped running the usual team stand-up without explanation','Two 1:1s cancelled this week without rescheduling','When team members ask about the reorg, Alex deflects: "I don\'t know anything"','Missed a deadline for a team capacity report you needed for planning']},
+        quote:{sp:'Alex, when you pulled them aside',tx:'"What\'s the point of building something if it just gets reorganised away? I spent six months earning this team\'s trust and now half of them are leaving."'},
+        beh:{fav:[],fal:['Agitated','Indifferent','Avoiding','Inconsistent']},
+        cDR:'regression',cCT:'organizational',cRL:'R3',cLS:'S3',
+        fbDR:{development:'The before shows Alex operating independently and proactively. The after shows a clear drop triggered by an external event. When someone who was working well suddenly withdraws, something disrupted what was already built.',regression:'Correct. The before establishes capability and self-direction. The after shows withdrawal, cancelled 1:1s, missed deadlines — behaviors that weren\'t there before. The capability hasn\'t gone anywhere; the motivation has.'},
+        fbCT:{none:'The reorg announcement is a clear, identifiable external event. The behavioral shift happened directly in response to it.',personal:'The reorg is a company-wide structural decision.',professional:'Close — but it\'s a company-wide decision rather than a change to Alex\'s individual role.',organizational:'Correct. A company-wide reorg is organizational change. The before shows Alex functioning well. The reorg — not a skill gap — caused the shift.'},
+        fbRL:{R1:'The before shows six months of growing capability. The ability is real and demonstrated.',R2:'The before proves Alex\'s ability was established. What changed is the motivation to use those skills, not the skills themselves.',R3:'Correct. The before proves the capability. The after shows that capability is still there but the willingness to apply it has collapsed. The reorg knocked the motivation, not the skill.',R4:'Alex is clearly not self-directing right now.'},
+        fbLS:{S1:'Alex was running independently last month. Returning to close direction now would feel like a demotion.',S2:'The before makes clear there is no skill gap. The issue is motivation and commitment.',S3:'Correct. The shift tells you this is about motivation, not ability. Acknowledge the loss — it\'s real. Don\'t rush to solve it. Help Alex separate frustration about the reorg from their identity as a leader.',S4:'Stepping back when someone has gone this quiet makes it significantly worse.'}
+      },
+      {
+        title:'Checkpoint 4: New team assembled — rebuilding',
+        context:'After the reorg, Alex now leads a newly assembled team with several people they have never worked with before.',
+        r2r3:true,
+        before:{sub:'Two weeks ago — Alex\'s mindset after your supporting conversations',items:['Motivation returned: "I\'m going to build this team properly from the start"','Proactively set up a team kickoff to establish working norms','Reached out individually to welcome each new team member before day one','You felt confident enough to step back and let Alex lead the transition']},
+        after:{sub:'This week — cracks appearing with two new members',items:['1:1s with two new engineers going poorly — conversations feel transactional','One new team member went directly to you with a question, bypassing Alex','Alex\'s usual approach — structured agendas, direct feedback — isn\'t landing','Said after stand-up: "I feel like I\'m starting over with some of these people"']},
+        quote:{sp:'Alex, end-of-week message',tx:'"The kickoff went well but I can\'t get traction with the new people. My normal approach doesn\'t seem to work with them and I\'m not sure what to adjust."'},
+        beh:{fav:['Enthusiastic','Proactive'],fal:['Inconsistent','Unprepared']},
+        cDR:'development',cCT:'professional',cRL:'R2',cLS:'S2',
+        fbDR:{development:'Correct. The before shows motivation and existing leadership skills are back. The after shows those skills haven\'t yet translated to this specific new group. The foundation exists, but the application in this new context isn\'t proven yet.',regression:'Regression would mean Alex was leading this specific team well and then slipped. The after is the first real attempt with this new group.'},
+        fbCT:{none:'The new team composition created new challenges Alex hasn\'t navigated yet — that\'s a shift in professional context.',personal:'No personal event.',professional:'Correct. A significantly changed team — new people, different styles, no established trust — represents a shift in professional context. Alex\'s existing skills partially transfer, but this specific group has created genuine gaps.',organizational:'Specific to Alex\'s team situation rather than company-wide.'},
+        fbRL:{R1:'The before shows real, demonstrated leadership skills. This isn\'t starting from zero.',R2:'Correct. The before shows motivation and existing ability. The after shows that ability isn\'t yet proven with this specific team — the approach isn\'t landing, a team member is bypassing Alex.',R3:'This would require proven ability with this team. The after is clear the approach isn\'t working with the new members yet.',R4:'The new dynamic is still producing unproven situations.'},
+        fbLS:{S1:'Alex has too much established experience to return to pure direction.',S2:'Correct. Help Alex diagnose why the usual approach isn\'t landing — style, pace, relationship-building? Work through it together, build on what already exists.',S3:'Alex needs active guidance on this specific challenge — stepping back won\'t resolve it.',S4:'Too soon — this new dynamic hasn\'t been successfully navigated yet.'}
+      }
+    ]
+  },
+  {
+    id:'morgan',title:"Morgan's Story",tagline:'Resistant expert → fully engaged → new skill → personal regression',
+    av:'MR',ac:{bg:'#E1F5EE',tx:'#085041'},role:'Regional Sales Manager',
+    rj:[{l:'R3',bg:'#E1F5EE',tx:'#085041'},{l:'R4',bg:'#EAF3DE',tx:'#27500A'},{l:'R1',bg:'#E6F1FB',tx:'#0C447C'},{l:'R3',bg:'#E1F5EE',tx:'#085041'}],
+    debrief:{
+      opening:"Morgan's scenario shows how the same person can need completely different leadership approaches depending on what they're doing and what's happening to them. The before/after shift is the key to telling those situations apart.",
+      questions:[
+        {q:"At checkpoint 1, the ability was clearly there in the before. What did the after tell you about what was missing?",note:"The before shows top performance. The after shows compliance without commitment — doing the job but withholding the energy. Ability intact, engagement absent. That gap is what the shift reveals."},
+        {q:"At checkpoint 3, Morgan is a senior top performer taking on something brand new. How should that experience affect your approach?",note:"It shouldn't change the diagnosis — the shift from the before (expert, autonomous) to the after (asking basic definitions, methodology errors) is unambiguous. But it should change how you deliver the support. Framing matters."},
+        {q:"At checkpoint 4, Morgan said 'I'm fine.' What did the shift tell you that the words didn't?",note:"The before established peak, self-directed performance. The after showed missed calls, flat energy, dropping numbers. Personal change is often invisible in what people say. It shows up in what they do."}
+      ],
+      keyInsight:"The same person can need completely different leadership approaches depending on what they're doing. That's not inconsistency — it's responsiveness. The before/after shift tells you which approach each situation needs right now."
+    },
+    checkpoints:[
+      {
+        title:'Checkpoint 1: Resistant top closer',
+        context:'Morgan has just transferred into your region — the transfer was not their choice.',
+        r2r3:false,
+        before:{sub:'Morgan in the previous region — before the transfer',items:['Highest close rate in the company for two consecutive years','Voluntarily mentored junior reps; shared playbooks openly','Brought creative deal structures no one else had tried','Previous manager: "The most complete sales professional I\'ve managed"']},
+        after:{sub:'Three weeks since arriving in your region',items:['Close rate still high but energy in team meetings is flat','Said: "I know how to do this job. I don\'t need to reinvent the wheel."','Not sharing techniques or contributing ideas with the new team','Does what\'s asked, nothing more — compliance without enthusiasm']},
+        quote:{sp:'Morgan, after a team session',tx:'"Look, I didn\'t ask to be transferred. I had a good thing going over there. I\'ll hit my numbers but don\'t expect me to start over from scratch."'},
+        beh:{fav:['Reliable','Producing'],fal:['Indifferent','Withholding','Inflexible']},
+        cDR:'regression',cCT:'professional',cRL:'R3',cLS:'S3',
+        fbDR:{development:'The before shows a fully engaged, proactive top performer. The after shows the same person delivering results but withholding everything else. The ability is there — it\'s the willingness that isn\'t. Something caused that shift.',regression:'Correct. The before establishes what full engagement looked like. The after shows the same capability operating without commitment. The transfer knocked the motivation — not the skill.'},
+        fbCT:{none:'The involuntary transfer is a clear and identifiable change event.',personal:'No personal event — Morgan is clear the transfer is the issue.',professional:'Correct. An involuntary transfer is professional change — Morgan\'s situation changed without their input.',organizational:'The change is specific to Morgan\'s situation, not company-wide.'},
+        fbRL:{R1:'The before confirms two years of top performance. The ability is completely intact.',R2:'No ability gap — the before is unambiguous.',R3:'Correct. The before shows full ability and full engagement. The after shows the same ability with engagement stripped out. Proven skill, lost motivation.',R4:'The after makes clear the willingness is absent. Both dimensions are needed.'},
+        fbLS:{S1:'Directing someone whose before shows years of expert performance would be counterproductive.',S2:'There is no skill gap — the ability is fully intact.',S3:'Correct. The shift tells you this is a motivation problem, not an ability problem. Build the relationship first. Engagement can\'t be instructed — it has to be earned.',S4:'Operating without real buy-in is risky — the after shows compliance, not commitment.'}
+      },
+      {
+        title:'Checkpoint 2: Fully bought in',
+        context:'Several months have passed since Morgan joined your region.',
+        r2r3:false,
+        before:{sub:'Six weeks ago — Morgan thawing but still guarded',items:['Starting to share ideas in meetings — tentatively','Agreed to shadow a junior rep on one call','Still keeping score of what this region does differently']},
+        after:{sub:'This month — Morgan fully engaged',items:['Closed the largest deal in the region\'s history','Voluntarily started running weekly coaching sessions for junior reps','Proactively flagged a competitor pricing shift before anyone else noticed','Said in a team meeting: "I think we can be the best region in the company"']},
+        quote:{sp:'Morgan, one-on-one with you',tx:'"I\'ll be honest — I was ready to do the minimum when I got here. But this team is actually good. I want to help build something here."'},
+        beh:{fav:['Enthusiastic','Proactive','Accessible','Decisive','Cooperative'],fal:[]},
+        cDR:'development',cCT:'none',cRL:'R4',cLS:'S4',
+        fbDR:{development:'Correct. The shift from the before to the after is the completion of a development arc — from guarded compliance to full, proactive ownership.',regression:'Every behavior in the after is favorable. This is the opposite of regression.'},
+        fbCT:{none:'Correct. No new change event — this is the result of the supporting relationship built since checkpoint 1.',personal:'No personal event.',professional:'No new role change.',organizational:'No org change.'},
+        fbRL:{R1:'Peak performance — as far from the beginning as possible.',R2:'No ability gaps.',R3:'No commitment gap.',R4:'Correct. The shift from guarded to fully engaged is complete. Both dimensions are at their peak.'},
+        fbLS:{S1:'Directing a top performer at full engagement signals distrust.',S2:'No gaps to coach.',S3:'Morgan doesn\'t need emotional support — fully self-directing.',S4:'Correct. The shift to full engagement is the signal to delegate. Over-managing now would undo the trust built to get here.'}
+      },
+      {
+        title:'Checkpoint 3: Volunteering for analytics',
+        context:'Morgan has asked to lead a new data-driven forecasting initiative — something they have no prior experience with.',
+        r2r3:false,
+        before:{sub:'Morgan\'s current state in sales',items:['Closing deals at the highest rate in the region — fully autonomous','Mentoring junior reps independently; no guidance needed','You describe Morgan as "the most self-sufficient person on my team"','Check-ins are monthly, not weekly — full trust']},
+        after:{sub:'This week — first attempt at the forecasting project',items:['Has never used analytics tools — asked what "regression analysis" means','Built a first draft forecast model — methodology had fundamental errors','Sent it over with: "I know it\'s rough. Tell me what I\'m missing."','Excited and motivated: "I want to grow beyond just closing"']},
+        quote:{sp:'Morgan, when announcing the decision',tx:'"I want to grow beyond just closing. Data is where this industry is going and I\'d rather learn it now than get left behind. I know I\'ll be rubbish at first but I\'m committed."'},
+        beh:{fav:['Enthusiastic','Receptive','Cooperative'],fal:['Unprepared']},
+        cDR:'development',cCT:'professional',cRL:'R1',cLS:'S1',
+        fbDR:{development:'Correct. The before establishes expertise in one area. The after shows the very first attempt at a completely different type of work — no prior experience, fundamental errors, asking for basic definitions.',regression:'There is no prior performance in this area to regress from. The after is the very first attempt.'},
+        fbCT:{none:'Taking on a new area of work is still professional change — new responsibilities with a genuine gap.',personal:'No personal event.',professional:'Correct. Expanding into new work is professional change — voluntary, so motivation is high, but the gap is just as real.',organizational:'Specific to Morgan\'s choice, not company-wide.'},
+        fbRL:{R1:'Correct. The before shows expertise and full autonomy in one area. The after shows someone starting entirely from scratch in another — no demonstrated ability, fundamental errors, asking for basic definitions.',R2:'The methodology errors on the first draft aren\'t evidence of developing ability — they\'re evidence of being at the very beginning.',R3:'This would require proven ability. The after makes clear none exists in this area.',R4:'The expertise in the before is about a different area of work entirely.'},
+        fbLS:{S1:'Correct. The shift from the before (expert, autonomous) to the after (asking basic definitions, fundamental errors) tells you exactly what\'s needed — clear structure, step-by-step guidance, close follow-up.',S2:'Encouragement is useful, but the primary gap shown in the after is foundational knowledge.',S3:'The after makes clear the skills don\'t exist in this area yet.',S4:'The methodology errors make clear this isn\'t ready for independent execution.'}
+      },
+      {
+        title:'Checkpoint 4: Personal disruption — a shift in sales performance',
+        context:'Morgan has been going through a divorce — something they haven\'t fully disclosed. You\'ve noticed a change in their sales performance.',
+        r2r3:true,
+        before:{sub:'Last quarter — Morgan at peak',items:['Highest close rate in the region — consistent for over a year','Never missed a follow-up call; clients commented on the responsiveness','Brought energy and creativity to every client meeting','Full autonomy — you\'d stopped tracking Morgan\'s pipeline closely']},
+        after:{sub:'This month — a noticeable shift',items:['Close rate has dropped 22% in four weeks','Three missed follow-up calls — clients chased Morgan, not the other way around','Proposal quality still strong but energy in client meetings has become flat','You heard secondhand that Morgan is going through a divorce']},
+        quote:{sp:'Morgan, when you checked in',tx:'"I\'m fine. Just a bit distracted. I\'ll get back on track — don\'t worry about me." (Said quickly, avoided eye contact, moved on immediately.)'},
+        beh:{fav:['Prepared'],fal:['Inconsistent','Indifferent','Cautious']},
+        cDR:'regression',cCT:'personal',cRL:'R3',cLS:'S3',
+        fbDR:{development:'The before establishes peak, self-directed performance. The after shows a clear drop in behaviors that were previously reliable. Something disrupted what was working.',regression:'Correct. The before shows what full engagement looks like. The after shows missed calls, flat energy, dropping numbers — behaviors that weren\'t there before. The proposal quality confirms the ability is intact. What\'s changed is the capacity and motivation to apply it.'},
+        fbCT:{none:'A divorce is a significant personal change event — even if Morgan hasn\'t disclosed it directly.',personal:'Correct. A divorce is personal change — private, often underreported. The "I\'m fine" with averted eyes is itself a signal. The behavioral shift is the data the words are trying to cover up.',professional:'Not a role change.',organizational:'Not company-wide.'},
+        fbRL:{R1:'The proposal quality confirms the ability is fully intact.',R2:'A year of consistent performance proves the ability. The regression is in motivation and bandwidth, not in skill.',R3:'Correct. The before establishes proven, consistent performance. The after shows that ability is still there — proposal quality confirms it — but the motivation and bandwidth have dropped. The shift happened because of a personal disruption, not a skill gap.',R4:'Morgan is not operating at their usual level of self-direction right now.'},
+        fbLS:{S1:'The before makes clear this is an expert performer. Direction would feel punitive during a personal crisis.',S2:'The after confirms there\'s no skill gap.',S3:'Correct. The shift tells you this is about capacity and motivation, not ability. Check in as a person, not just as a manager. Create space without surveillance. With personal change, the relationship is the intervention.',S4:'Backing off entirely when someone has gone this quiet leaves them feeling unseen.'}
+      }
+    ]
+  },
+  {
+    id:'taylor',title:"Taylor's Track",tagline:'Steady HRBP → inherits broken team → rebuilds → org change regression',
+    av:'TL',ac:{bg:'#FAEEDA',tx:'#633806'},role:'Senior HR Business Partner',
+    rj:[{l:'R3',bg:'#E1F5EE',tx:'#085041'},{l:'R2',bg:'#FAEEDA',tx:'#633806'},{l:'R4',bg:'#EAF3DE',tx:'#27500A'},{l:'R3',bg:'#E1F5EE',tx:'#085041'}],
+    debrief:{
+      opening:"Taylor's scenario is built around a high-stakes, unexpected challenge — inheriting a broken team after a manager's sudden departure. The readiness journey is non-linear and the final regression is particularly rich to discuss because it's about meaning being taken away, not just change happening.",
+      questions:[
+        {q:"At checkpoint 1, Taylor was a steady, reliable HRBP. The after shows them rattled and out of their depth. What made this a development situation rather than regression?",note:"The before shows solid performance in familiar territory. The after shows the first attempt at a completely different kind of challenge — high conflict, no authority, no playbook. There's no prior peak in this type of crisis work to regress from. The difficulty is the gap between what Taylor knows and what this situation demands."},
+        {q:"At checkpoint 2, the 'you're not our manager' challenge broke Taylor's confidence. What does a leader do when someone they're supporting gets directly challenged on their authority?",note:"This is a rich discussion point — push groups to think concretely. The coaching isn't just about what Taylor should have said in the moment. It's about helping Taylor build a framework for handling authority challenges as an HR professional who has to lead without a formal title."},
+        {q:"At checkpoint 4, Taylor asked 'Why invest in something that might get shut down?' What does that tell you about what they actually need?",note:"It's not a question about workload. It's a question about meaning and recognition. The before showed Taylor investing everything. The after shows someone who has stopped believing that investment will matter. Psychological safety is the gap — and the response is connection and acknowledgment before performance conversation."}
+      ],
+      keyInsight:"The hardest regressions to respond to are the ones where the person's effort and investment have been undone by something outside their control. Restoring motivation in those moments isn't about the work — it's about helping someone reconnect to the value of what they've built, regardless of what the organisation does with it."
+    },
+    checkpoints:[
+      {
+        title:'Checkpoint 1: A manager disappears overnight',
+        context:'A people manager in the Sales division resigned without notice following a formal complaint. Taylor — your Senior HRBP — has been asked to step in and stabilise the situation immediately.',
+        r2r3:false,
+        before:{sub:'Taylor in their normal HRBP remit — last month',items:['Manages a steady caseload of employee relations independently','Trusted by business leaders to handle routine matters without escalation','You check in fortnightly — rarely needs direction on standard work','Described by peers as "calm, reliable, always knows the process"']},
+        after:{sub:'This week — first days embedded with the leaderless Sales team',items:['The team is in open conflict — two senior reps haven\'t spoken in a week','Taylor attempted a team session to hear concerns — it descended into venting','One team member has already gone to HR leadership to demand a formal investigation','Taylor came to you visibly rattled: "I\'ve never walked into anything like this"']},
+        quote:{sp:'Taylor, after day two',tx:'"I know what the process says but this isn\'t a process problem — it\'s a people problem. I don\'t know how to hold this together when they don\'t even want to be in the same room."'},
+        beh:{fav:['Receptive','Cooperative'],fal:['Cautious','Inconsistent','Unprepared']},
+        cDR:'development',cCT:'professional',cRL:'R2',cLS:'S2',
+        fbDR:{development:'Correct. The before shows Taylor performing steadily and independently in familiar territory. The after shows the same person stepping into a completely different kind of challenge — high conflict, no playbook, immediate pressure. The stumble in the after is the gap between what Taylor knows and what this situation demands.',regression:'Regression requires a prior consistent high point in this specific type of work. The after is Taylor\'s first real exposure to a team in active crisis — the difficulty is the gap, not a fall from a prior peak.'},
+        fbCT:{none:'The sudden departure and the crisis it created represent a significant professional change — Taylor\'s responsibilities have shifted suddenly and in a high-stakes way.',personal:'No personal event — the change is in Taylor\'s professional situation.',professional:'Correct. Being asked to step into a leaderless team in active crisis is professional change — Taylor\'s scope shifted suddenly and the new situation requires skills that haven\'t been tested before.',organizational:'The change is specific to Taylor\'s situation rather than a company-wide event.'},
+        fbRL:{R1:'The before shows Taylor has real HR experience — not starting from zero. There\'s a foundation to build on.',R2:'Correct. The before shows solid, independent performance in familiar work. The after shows that experience isn\'t yet sufficient for this level of conflict and complexity. Ability is developing — the knowledge of process is there, but the skill of managing a team in active crisis is not yet proven.',R3:'This would require proven ability in high-conflict team situations. The after is clear that Taylor is out of their depth here — this isn\'t a confidence problem, it\'s a genuine capability gap for this type of challenge.',R4:'The after shows Taylor is actively seeking guidance and rattled. Full self-direction isn\'t where this sits right now.'},
+        fbLS:{S1:'Taylor has solid HR experience — pure direction would feel undermining.',S2:'Correct. Taylor needs coaching through this specific situation — how to hold a conflict meeting, how to sequence the conversations, what to prioritise first. Work through the approach together. The before shows Taylor is capable; the after shows where the gap is.',S3:'Taylor needs more active task guidance than Supporting provides right now.',S4:'Too much autonomy when someone is visibly rattled leads to poor decisions with real consequences for the team.'}
+      },
+      {
+        title:'Checkpoint 2: Six weeks in — making progress, then a setback',
+        context:'Taylor has been working with the Sales team for six weeks, with your close coaching throughout.',
+        r2r3:true,
+        before:{sub:'Weeks 2–4 — Taylor finding an approach',items:['Started holding individual conversations rather than group sessions — immediately less volatile','Brokered an agreement between the two feuding reps to work on separate accounts temporarily','Documented the complaint timeline clearly; HR leadership paused the formal investigation','You debriefed with Taylor after each major move — they incorporated feedback quickly']},
+        after:{sub:'This week — a relapse in team dynamics',items:['The two senior reps had a public argument in front of junior colleagues','Taylor attempted to intervene and was told: "You\'re not our manager, you can\'t tell us what to do"','Taylor didn\'t challenge this — backed down and left the situation unresolved','Has avoided going back to the floor since — managing remotely via email']},
+        quote:{sp:'Taylor, when you checked in',tx:'"I thought we were making progress. But the moment it got confrontational I just didn\'t have the authority. They\'re right — I\'m not their manager. I don\'t know how to lead without the title."'},
+        beh:{fav:['Receptive','Prepared'],fal:['Cautious','Avoiding','Inconsistent']},
+        cDR:'development',cCT:'none',cRL:'R2',cLS:'S2',
+        fbDR:{development:'Correct. The before shows real, meaningful progress — de-escalation strategies working, a formal complaint managed, increasing confidence. The after shows a harder test that exposed where the developing skill isn\'t yet solid. The "you\'re not our manager" challenge is one that even experienced leaders find difficult.',regression:'The before shows Taylor was still developing — not yet at a consistent peak with this team. The stumble in the after is part of the arc, not a fall from an established high point.'},
+        fbCT:{none:'Correct. No external change event — the relapse came from within the ongoing challenge Taylor is developing through.',personal:'No personal event indicated.',professional:'Taylor\'s situation hasn\'t changed — this is a harder test within the same challenge.',organizational:'No org change driving this.'},
+        fbRL:{R1:'The before shows clear progress — real strategies working, formal complaint managed, growing confidence. Taylor has moved well past the starting point.',R2:'Correct. The before shows developing ability; the after shows that ability isn\'t yet consistent when directly challenged. The "you\'re not my manager" confrontation is where the skill boundary currently sits. Confidence has also taken a hit — both elements point to continued development.',R3:'This would require consistent, proven ability to handle conflict in this team. The after shows one direct challenge was enough to make Taylor back down and disappear.',R4:'Actively avoiding the floor and managing by email after a difficult moment is not self-direction.'},
+        fbLS:{S1:'The before shows too much real progress for pure direction — that would ignore what Taylor has already built.',S2:'Correct. Debrief the confrontation — what happened in that moment, what Taylor could have said, how to handle the authority challenge next time. Role-play it. The before is evidence Taylor is growing; the after is where to focus the coaching next.',S3:'Taylor needs more active guidance than Supporting provides — the avoidance behaviour needs to be addressed directly.',S4:'Too soon — managing by email after a confrontation is a signal that more support, not less, is needed.'}
+      },
+      {
+        title:'Checkpoint 3: Four months in — the team turns a corner',
+        context:'Taylor has been embedded with the Sales team for four months. The two feuding reps have been placed on a mediated working agreement and the team has stabilised significantly.',
+        r2r3:false,
+        before:{sub:'Six weeks ago — Taylor still checking in occasionally',items:['Managing team dynamics well but confirming approach with you before significant interventions','Starting to be sought out by junior team members for informal advice','Successfully ran two team development sessions independently','Still uncertain when direct confrontation arose']},
+        after:{sub:'This week — Taylor operating with full confidence',items:['Sales team engagement score increased 24 points since Taylor arrived','The two previously feuding reps are now co-leading a joint pitch — Taylor brokered it','Taylor proactively flagged an emerging tension with a new hire before it became an issue','HR leadership asked Taylor to document her approach so others can learn from it']},
+        quote:{sp:'Taylor, in your check-in',tx:'"Four months ago I nearly asked to be taken off this. Now I feel like this is the most valuable thing I\'ve done in my career. I actually know how to do this now."'},
+        beh:{fav:['Proactive','Decisive','Reliable','Accessible','Enthusiastic'],fal:[]},
+        cDR:'development',cCT:'none',cRL:'R4',cLS:'S4',
+        fbDR:{development:'Correct. The shift from the before to the after is the completion of a difficult development arc. Taylor went from rattled and out of their depth to fully capable, proactive, and being asked to teach others. Both ability and willingness are at their peak.',regression:'Every behavior in the after is favorable. The shift from "checking in before interventions" to "proactively flagging issues and brokering complex agreements independently" is growth, not regression.'},
+        fbCT:{none:'Correct. No change event — this is Taylor reaching full capability through sustained development and coaching.',personal:'No personal event.',professional:'No new role change.',organizational:'No org change.'},
+        fbRL:{R1:'Taylor is at peak performance and being asked to teach others.',R2:'No ability gaps — the after shows consistent, independent delivery on a very hard challenge.',R3:'No motivation or confidence gap — the quote shows full ownership and pride in the work.',R4:'Correct. The before-to-after shift shows both ability and willingness at their peak. Taylor is proactive, independent, and creating value beyond their own caseload.'},
+        fbLS:{S1:'Directing Taylor at this point would undermine the independence the after so clearly demonstrates.',S2:'No development gaps remaining.',S3:'Taylor is thriving — no emotional support needed.',S4:'Correct. The after is the signal to fully delegate. Taylor has earned the autonomy — continuing to check in closely now would signal you don\'t trust what they\'ve built.'}
+      },
+      {
+        title:'Checkpoint 4: A restructure puts everything at risk',
+        context:'The company has announced a restructure. The Sales division — the team Taylor has spent four months rebuilding — is being split across two new business units, each reporting to different leadership. Taylor had no warning and no input.',
+        r2r3:true,
+        before:{sub:'Last month — Taylor at full capability with the Sales team',items:['Managing team dynamics proactively — no guidance needed','Trusted completely by Sales leadership to handle anything that arose','In the middle of rolling out a team health framework she designed herself','You had stopped scheduling regular check-ins — full autonomy']},
+        after:{sub:'This week — since the restructure announcement',items:['The team health framework Taylor was rolling out has been paused pending restructure decisions','Taylor has disengaged from the Sales team — attending meetings but contributing nothing','Missed two commitments to Sales leaders this week she would never have missed before','When you asked how she was doing: "I just need to know if any of what I\'ve built actually matters"']},
+        quote:{sp:'Taylor, in a rare moment of candour',tx:'"I gave everything to fix that team. I thought I\'d finally figured out what I\'m good at. And now it\'s just... being split up. No one asked me. No one even told me it was coming."'},
+        beh:{fav:[],fal:['Indifferent','Withholding','Inconsistent','Cautious']},
+        cDR:'regression',cCT:'organizational',cRL:'R3',cLS:'S3',
+        fbDR:{development:'The before shows Taylor operating at full, independent capability. The after shows a clear, specific drop triggered by an external event that felt like a removal of meaning and recognition. This isn\'t a development challenge; something disrupted what was already built.',regression:'Correct. The before establishes Taylor at peak performance. The after shows disengagement, missed commitments, and withdrawal. The restructure announcement is the identifiable trigger. The capability hasn\'t gone anywhere; the motivation has.'},
+        fbCT:{none:'The restructure announcement is a clear, identifiable external event. Taylor\'s behavioral shift happened directly in response to it.',personal:'The restructure is a company-wide decision, not a private personal situation.',professional:'Close — the restructure does directly affect Taylor\'s work, but it\'s driven by a company-wide structural decision.',organizational:'Correct. A company-wide restructure is organizational change — and this one is particularly painful because it has undone something Taylor worked very hard to build. "Why invest if it might get shut down?" signals the psychological safety is gone.'},
+        fbRL:{R1:'Four months of increasingly capable, independent work confirms the ability is fully intact.',R2:'The before proves the ability. What\'s regressed is motivation and meaning — not skill. Those require different responses.',R3:'Correct. The before establishes proven, consistent capability. The after shows that capability is still present — the knowledge and skills haven\'t gone anywhere — but the will to apply them has collapsed in response to the restructure.',R4:'Taylor is not operating at her usual level of initiative and ownership. The missed commitments and disengagement confirm this.'},
+        fbLS:{S1:'The before confirms Taylor is a capable, experienced professional. Returning to direction now would feel like a punishment after everything she\'s built.',S2:'There is no skill gap — the before is unambiguous about Taylor\'s capability.',S3:'Correct. The shift from the before to the after tells you this is about motivation and meaning, not ability. Start with acknowledgment — what Taylor built was real and it mattered, regardless of what the restructure does to the reporting lines. Her skills, her framework, her relationships are hers regardless of what the merger decides. You may not be able to change the restructure, but you can be honest about what you know and make clear her contribution has lasting value.',S4:'Withdrawing support when someone is asking whether their work matters at all will confirm their worst fear.'}
+      }
+    ]
+  }
+];
+
+// State
+let activeScenarioIdx=null,completedScenarios={};
+let currentScenario=null,cpIdx=0,answers=[],score=0;
+let selDR=null,selCT=null,selRL=null,selLS=null;
+let teams=[
+  {name:'Team 1',scores:{alex:null,morgan:null,taylor:null}},
+  {name:'Team 2',scores:{alex:null,morgan:null,taylor:null}},
+  {name:'Team 3',scores:{alex:null,morgan:null,taylor:null}},
+  {name:'Team 4',scores:{alex:null,morgan:null,taylor:null}}
+];
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+  if(id==='screen-leaderboard')renderLeaderboard();
+  if(id==='screen-team-home')renderTeamHome();
+}
+
+function renderTeamHome(){
+  const el=document.getElementById('team-status-content');
+  if(activeScenarioIdx===null){
+    el.innerHTML=`<div style="color:var(--text2);font-size:14px;margin-bottom:0.5rem;">⏳ Waiting for your facilitator to release a scenario...</div>`;
+  } else {
+    const s=SCENARIOS[activeScenarioIdx];
+    el.innerHTML=`<div style="margin-bottom:0.75rem;"><span class="badge badge-green">Scenario ready</span></div>
+      <div style="font-weight:600;font-size:16px;margin-bottom:0.25rem;">${s.title}</div>
+      <div class="muted" style="margin-bottom:1rem;font-size:13px;">${s.role}</div>
+      <button class="btn btn-primary" onclick="startTeamPlay(${activeScenarioIdx})">Start scenario →</button>`;
+  }
+}
+
+function renderFacList(){
+  const c=document.getElementById('fac-scenario-list');c.innerHTML='';
+  SCENARIOS.forEach((s,i)=>{
+    const isDone=completedScenarios[s.id];
+    const isActive=activeScenarioIdx===i;
+    const div=document.createElement('div');
+    div.className='scenario-card'+(isActive?' active-sc':'');
+    if(isDone)div.style.opacity='0.75';
+    const statusBadge=isDone?'<span class="badge badge-green">Completed</span>':isActive?'<span class="badge badge-blue">Active</span>':'<span class="badge badge-neutral">Not started</span>';
+    const rjHTML=s.rj.map((n,ji)=>`<span class="rj-node" style="background:${n.bg};color:${n.tx};">${n.l}</span>${ji<s.rj.length-1?'<span class="rj-arrow">→</span>':''}`).join('');
+    div.innerHTML=`<div style="display:flex;align-items:flex-start;gap:12px;">
+      <div class="avatar" style="background:${s.ac.bg};color:${s.ac.tx};">${s.av}</div>
+      <div style="flex:1;">
+        <div style="font-weight:600;font-size:15px;margin-bottom:2px;">${s.title}</div>
+        <div class="muted" style="margin-bottom:6px;">${s.role}</div>
+        <div class="rj">${rjHTML}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
+        ${statusBadge}
+        <button class="btn${isActive?' btn-primary':''}" style="font-size:12px;padding:4px 12px;" onclick="event.stopPropagation();${isActive?`startTeamPlay(${i})`:`activateScenario(${i})`}">${isActive?'Preview →':'Release to groups'}</button>
+      </div>
+    </div>`;
+    c.appendChild(div);
+  });
+  document.getElementById('fac-status').textContent=activeScenarioIdx!==null?`Active: ${SCENARIOS[activeScenarioIdx].title}`:'No scenario active';
+}
+
+function activateScenario(idx){activeScenarioIdx=idx;renderFacList();renderTeamHome();}
+
+function startTeamPlay(idx){
+  currentScenario=SCENARIOS[idx];cpIdx=0;answers=[];score=0;
+  showScreen('screen-game');renderCheckpoint();
+}
+
+function renderCheckpoint(){
+  const cp=currentScenario.checkpoints[cpIdx];
+  const total=currentScenario.checkpoints.length;
+  selDR=null;selCT=null;selRL=null;selLS=null;
+
+  document.getElementById('game-scenario-name').textContent=currentScenario.title;
+  document.getElementById('game-cp-badge').textContent=`Checkpoint ${cpIdx+1} of ${total}`;
+  document.getElementById('progress-fill').style.width=((cpIdx/total)*100)+'%';
+
+  const firstName={'AK':'Alex','MR':'Morgan','TL':'Taylor'}[currentScenario.av];
+  const rjHTML=currentScenario.rj.map((n,ji)=>`<span class="rj-node" style="background:${n.bg};color:${n.tx};${ji===cpIdx?'outline:2px solid #185FA5;outline-offset:1px;':''}">${n.l}</span>${ji<currentScenario.rj.length-1?'<span class="rj-arrow">→</span>':''}`).join('');
+
+  document.getElementById('employee-card').innerHTML=`
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div class="avatar" style="background:${currentScenario.ac.bg};color:${currentScenario.ac.tx};">${currentScenario.av}</div>
+      <div style="flex:1;"><div style="font-weight:600;font-size:15px;">${firstName}</div><div class="muted">${currentScenario.role}</div><div class="rj" style="margin-top:6px;">${rjHTML}</div></div>
+      <span class="badge badge-blue" style="flex-shrink:0;">${cp.title}</span>
+    </div>`;
+
+  document.getElementById('context-area').innerHTML=cp.context?`<div class="context-note">${cp.context}</div>`:'';
+
+  const beh=cp.beh;
+  const behHTML=(beh.fav.length||beh.fal.length)?`<div style="margin-top:0.75rem;padding-top:0.75rem;border-top:0.5px solid var(--border2);">
+    <div class="section-label" style="margin-bottom:0.4rem;">Current behaviors</div>
+    <div>${beh.fav.map(b=>`<span class="behavior-tag bt-good">${b}</span>`).join('')}${beh.fal.map(b=>`<span class="behavior-tag bt-bad">${b}</span>`).join('')}</div>
+    <div style="font-size:11px;color:var(--text2);margin-top:0.4rem;"><span style="background:var(--green-light);color:var(--green);padding:1px 5px;border-radius:3px;">green=favorable</span>&nbsp;<span style="background:var(--red-light);color:var(--red);padding:1px 5px;border-radius:3px;">red=faltering</span></div>
+  </div>`:'';
+
+  document.getElementById('events-card').innerHTML=`
+    <div class="section-label" style="margin-bottom:0.75rem;">The shift you are observing</div>
+    <div class="shift-grid">
+      <div class="shift-col shift-before">
+        <div class="shift-label shift-label-b">Before</div>
+        ${cp.before.sub?`<div class="shift-sublabel">${cp.before.sub}</div>`:''}
+        ${cp.before.items.map(i=>`<div class="shift-item">${i}</div>`).join('')}
+      </div>
+      <div class="shift-col shift-after">
+        <div class="shift-label shift-label-a">After / Now</div>
+        ${cp.after.sub?`<div class="shift-sublabel">${cp.after.sub}</div>`:''}
+        ${cp.after.items.map(i=>`<div class="shift-item">${i}</div>`).join('')}
+      </div>
+    </div>
+    ${cp.quote?`<div class="quote-box">"${cp.quote.tx}" <span class="quote-attr">— ${cp.quote.sp}</span></div>`:''}
+    ${behHTML}
+    <p style="font-size:11px;color:var(--text2);margin-top:0.6rem;">Discuss the shift with your group before selecting below.</p>`;
+
+  document.getElementById('tip-r2r3').style.display=cp.r2r3?'block':'none';
+
+  // Step 1
+  const drGrid=document.getElementById('devReg-grid');drGrid.innerHTML='';
+  [{id:'development',t:'Development',d:'Gaining ability — naturally progressing'},{id:'regression',t:'Regression',d:'Ability was proven — something has disrupted performance or motivation'}].forEach(opt=>{
+    const b=document.createElement('button');b.className='choice-btn';b.id='dr-'+opt.id;
+    b.innerHTML=`<div class="choice-btn-title">${opt.t}</div><div class="choice-btn-sub">${opt.d}</div>`;
+    b.onclick=()=>selectDR(opt.id);drGrid.appendChild(b);
+  });
+
+  ['step2-card','step3-card','step4-card','feedback-area'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+  document.getElementById('s1-num').className='step-n step-n-active';
+  ['s2-num','s3-num','s4-num'].forEach(id=>document.getElementById(id).className='step-n step-n-locked');
+  document.getElementById('submit-btn').style.display='inline-block';
+  document.getElementById('submit-btn').disabled=true;
+  document.getElementById('next-btn').style.display='none';
+}
+
+function selectDR(id){
+  selDR=id;selCT=null;selRL=null;selLS=null;
+  document.querySelectorAll('[id^="dr-"]').forEach(b=>b.classList.remove('sel-blue'));
+  document.getElementById('dr-'+id).classList.add('sel-blue');
+  document.getElementById('s1-num').className='step-n step-n-done';
+  document.getElementById('s2-num').className='step-n step-n-active';
+  document.getElementById('step2-card').style.display='block';
+  const grid=document.getElementById('changeType-grid');grid.innerHTML='';
+  CT.forEach(ct=>{
+    const b=document.createElement('button');b.className='choice-btn';b.id='ct-'+ct.id;
+    b.innerHTML=`<div class="choice-btn-title">${ct.label}</div><div class="choice-btn-sub">${ct.desc}</div>`;
+    b.onclick=()=>selectCT(ct.id);grid.appendChild(b);
+  });
+  document.getElementById('step3-card').style.display='none';
+  document.getElementById('step4-card').style.display='none';
+  updateSubmit();
+}
+
+function selectCT(id){
+  selCT=id;selRL=null;selLS=null;
+  document.querySelectorAll('[id^="ct-"]').forEach(b=>b.classList.remove('sel-blue'));
+  document.getElementById('ct-'+id).classList.add('sel-blue');
+  document.getElementById('s2-num').className='step-n step-n-done';
+  document.getElementById('s3-num').className='step-n step-n-active';
+  document.getElementById('step3-card').style.display='block';
+  const grid=document.getElementById('readiness-grid');grid.innerHTML='';
+  RL.forEach(r=>{
+    const b=document.createElement('button');b.className='choice-btn';b.id='r-'+r.id;
+    b.innerHTML=`<div class="choice-btn-title" style="font-size:15px;">${r.label}</div>`;
+    b.onclick=()=>selectRL(r.id);grid.appendChild(b);
+  });
+  document.getElementById('step4-card').style.display='none';
+  updateSubmit();
+}
+
+function selectRL(id){
+  selRL=id;selLS=null;
+  document.querySelectorAll('[id^="r-"]').forEach(b=>b.classList.remove('sel-blue'));
+  document.getElementById('r-'+id).classList.add('sel-blue');
+  document.getElementById('s3-num').className='step-n step-n-done';
+  document.getElementById('s4-num').className='step-n step-n-active';
+  document.getElementById('step4-card').style.display='block';
+  const grid=document.getElementById('style-grid');grid.innerHTML='';
+  LS.forEach(s=>{
+    const b=document.createElement('button');b.className='choice-btn';b.id='st-'+s.id;
+    b.innerHTML=`<div class="choice-btn-title">${s.label}</div><div class="choice-btn-sub">${s.desc}</div>`;
+    b.onclick=()=>selectLS(s.id);grid.appendChild(b);
+  });
+  updateSubmit();
+}
+
+function selectLS(id){
+  selLS=id;
+  document.querySelectorAll('[id^="st-"]').forEach(b=>b.classList.remove('sel-green'));
+  document.getElementById('st-'+id).classList.add('sel-green');
+  document.getElementById('s4-num').className='step-n step-n-done';
+  updateSubmit();
+}
+
+function updateSubmit(){document.getElementById('submit-btn').disabled=!(selDR&&selCT&&selRL&&selLS);}
+
+function submitAnswer(){
+  const cp=currentScenario.checkpoints[cpIdx];
+  const drOk=selDR===cp.cDR,ctOk=selCT===cp.cCT,rlOk=selRL===cp.cRL,lsOk=selLS===cp.cLS;
+  const pts=[drOk,ctOk,rlOk,lsOk].filter(Boolean).length;
+  score+=pts;
+  answers.push({drOk,ctOk,rlOk,lsOk,pts,cp});
+
+  const cls=pts===4?'fb-correct':pts>=2?'fb-partial':'fb-wrong';
+  const icon=pts===4?'✓':pts>=2?'~':'✗';
+  const heading=pts===4?'Perfect diagnosis!':pts>=2?'Partially correct':'Not quite — here\'s what to consider';
+
+  const steps=[
+    {name:'Development vs regression',ok:drOk,fb:cp.fbDR[selDR]||cp.fbDR[cp.cDR]},
+    {name:'Change type',ok:ctOk,fb:cp.fbCT[selCT]||cp.fbCT[cp.cCT]},
+    {name:'Readiness level',ok:rlOk,fb:cp.fbRL[selRL]||cp.fbRL[cp.cRL]},
+    {name:'Leadership approach',ok:lsOk,fb:cp.fbLS[selLS]||cp.fbLS[cp.cLS]}
+  ];
+
+  const rowsHTML=steps.map(s=>`<div class="fb-row">
+    <div class="fb-row-head">
+      <span style="font-size:12px;font-weight:600;color:${s.ok?'var(--green)':'var(--red)'};">${s.ok?'✓':'✗'}</span>
+      <span class="fb-row-name">${s.name}</span>
+    </div>
+    <div class="fb-row-text">${s.fb}</div>
+  </div>`).join('<div class="divider"></div>');
+
+  document.getElementById('feedback-area').style.display='block';
+  document.getElementById('feedback-area').innerHTML=`<div class="fb-box ${cls}"><div class="fb-heading">${icon} ${heading} (${pts}/4)</div>${rowsHTML}</div>`;
+  document.getElementById('submit-btn').style.display='none';
+  const isLast=cpIdx===currentScenario.checkpoints.length-1;
+  const nb=document.getElementById('next-btn');
+  nb.style.display='inline-block';
+  nb.textContent=isLast?'See your results →':'Next checkpoint →';
+}
+
+function nextCheckpoint(){
+  cpIdx++;
+  if(cpIdx>=currentScenario.checkpoints.length){showResults();return;}
+  renderCheckpoint();window.scrollTo(0,0);
+}
+
+function showResults(){
+  showScreen('screen-results');
+  const maxPts=currentScenario.checkpoints.length*4;
+  const pct=Math.round((score/maxPts)*100);
+  completedScenarios[currentScenario.id]=true;renderFacList();
+  document.getElementById('results-sub').textContent=currentScenario.title;
+  const ring=document.getElementById('score-display');
+  ring.textContent=pct+'%';
+  ring.style.background=pct>=80?'var(--green-light)':pct>=50?'var(--amber-light)':'var(--red-light)';
+  ring.style.color=pct>=80?'var(--green)':pct>=50?'var(--amber)':'var(--red)';
+  document.getElementById('score-label').textContent=pct>=80?'Excellent situational awareness!':pct>=50?'Good — review the feedback for patterns.':'Keep practicing — diagnosing shifts takes time to internalize.';
+  document.getElementById('final-score-display').textContent=`${score} / ${maxPts}`;
+  document.getElementById('final-score-max').textContent=`points (${pct}%) — tell your facilitator`;
+  document.getElementById('results-breakdown').innerHTML='<div class="section-label" style="margin-bottom:0.75rem;">Checkpoint summary</div>'+
+    answers.map(a=>`<div class="card" style="display:flex;gap:10px;align-items:flex-start;margin-bottom:0.5rem;">
+      <div style="flex-shrink:0;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;background:${a.pts===4?'var(--green-light)':a.pts>=2?'var(--amber-light)':'var(--red-light)'};color:${a.pts===4?'var(--green)':a.pts>=2?'var(--amber)':'var(--red)'};">${a.pts===4?'✓':a.pts>=2?'~':'✗'}</div>
+      <div><div style="font-weight:500;font-size:13px;margin-bottom:2px;">${a.cp.title}</div>
+      <div class="muted small">Dev/Reg ${a.drOk?'✓':'✗'} &nbsp;|&nbsp; Change ${a.ctOk?'✓':'✗'} &nbsp;|&nbsp; Readiness ${a.rlOk?'✓':'✗'} &nbsp;|&nbsp; Approach ${a.lsOk?'✓':'✗'} &nbsp;· ${a.pts}/4 pts</div></div>
+    </div>`).join('');
+}
+
+function renderLeaderboard(){
+  const scenIds=['alex','morgan','taylor'];
+  const scenNames={alex:"Alex's Pivot",morgan:"Morgan's Story",taylor:"Taylor's Track"};
+  let html='';
+  scenIds.forEach(sid=>{
+    html+=`<div class="card" style="margin-bottom:1rem;"><div class="section-label" style="margin-bottom:0.75rem;">${scenNames[sid]} — enter scores (max 16)</div>
+    ${teams.map((t,ti)=>`<div class="lb-row">
+      <span class="muted small" style="min-width:55px;">Team ${ti+1}</span>
+      <input class="lb-input" type="text" value="${t.name}" oninput="updateTeamName(${ti},this.value)" style="max-width:150px;flex:1;" placeholder="Team name">
+      <input class="lb-input" type="number" min="0" max="16" value="${t.scores[sid]!==null?t.scores[sid]:''}" oninput="updateScore('${sid}',${ti},this.value)" style="max-width:70px;" placeholder="Score">
+      <span class="muted small">/ 16</span>
+    </div>`).join('')}</div>`;
+  });
+  document.getElementById('lb-scenario-scores').innerHTML=html;
+  renderOverallLb();
+}
+
+function updateTeamName(idx,val){teams[idx].name=val||`Team ${idx+1}`;renderOverallLb();}
+function updateScore(sid,ti,val){const n=parseInt(val);teams[ti].scores[sid]=isNaN(n)?null:Math.min(16,Math.max(0,n));renderOverallLb();}
+
+function renderOverallLb(){
+  const totals=teams.map(t=>({name:t.name,total:Object.values(t.scores).reduce((a,v)=>a+(v||0),0),played:Object.values(t.scores).filter(v=>v!==null).length})).sort((a,b)=>b.total-a.total);
+  const medals=['🥇','🥈','🥉','4.'];
+  document.getElementById('lb-overall').innerHTML=totals.map((t,r)=>`<div class="lb-row" style="background:${r===0&&t.total>0?'var(--green-light)':r===1&&t.total>0?'var(--amber-light)':'var(--bg2)'};">
+    <span style="font-size:16px;width:28px;text-align:center;">${t.total>0?medals[Math.min(r,3)]:'—'}</span>
+    <span style="flex:1;font-weight:${r===0&&t.total>0?600:400};font-size:14px;">${t.name}</span>
+    <span class="muted small">${t.played?t.played+' scenario'+(t.played>1?'s':''):''}</span>
+    <span style="font-size:18px;font-weight:600;color:${r===0&&t.total>0?'var(--green)':r===1&&t.total>0?'var(--amber)':'var(--blue)'};">${t.total}</span>
+  </div>`).join('');
+}
+
+function renderDebrief(){
+  const tabs=document.getElementById('debrief-tabs');
+  const content=document.getElementById('debrief-content');
+  const allTabs=[{id:'all',label:'Closing debrief'},...SCENARIOS.map(s=>({id:s.id,label:s.title}))];
+  function render(id){
+    tabs.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.id===id));
+    if(id==='all'){
+      content.innerHTML=`<div class="card">${[
+        {q:"Every checkpoint showed a before and an after. What did having that shift visible change about how you diagnosed?",note:"Push groups to name specifically what they looked for. The shift is the evidence — not the person's reputation or job title. 'Compared to what? What changed?' is the question that unlocks the diagnosis."},
+        {q:"Did you notice moments where someone was showing very different behaviors in different situations? What did that tell you?",note:"This is where task-specificity surfaces naturally — let groups name it themselves. Listen for: 'Morgan was great at sales but had no idea about analytics' or 'Alex was clearly capable as an engineer but lost as a leader.' Don't name the concept for them — ask what they think explains it."},
+        {q:"Think of someone on your team. Can you describe a shift you've observed in their behavior recently — and what you think it means?",note:"Give 90 seconds individually. This is the transfer moment. If they can't name a shift, that's the insight: we often miss the signal because we're not looking for it systematically."},
+        {q:"What's the difference between a development dip and a regression — and how does the shift help you tell them apart?",note:"Development dips tend to show up in the quality of work on a harder challenge. Regression shows up in the energy and engagement around work that was previously reliable. Ask groups to find an example of each across the three scenarios."},
+        {q:"When you can't fully explain the 'why' behind an organizational change — what can you still do?",note:"'I don't have all the answers' + 'here's what I do know' + 'here's what we can focus on together' is more honest and often more effective than manufactured confidence."}
+      ].map(item=>`<div style="margin-bottom:1rem;"><div class="debrief-q">${item.q}</div><div class="debrief-note"><strong>Facilitator note:</strong> ${item.note}</div></div>`).join('')}</div>`;
+    } else {
+      const s=SCENARIOS.find(x=>x.id===id);
+      const d=s.debrief;
+      const rjHTML=s.rj.map((n,ji)=>`<span class="rj-node" style="background:${n.bg};color:${n.tx};">${n.l}</span>${ji<s.rj.length-1?'<span class="rj-arrow">→</span>':''}`).join('');
+      content.innerHTML=`<div class="card">
+        <div class="section-label" style="margin-bottom:0.4rem;">${s.title}</div>
+        <div class="rj" style="margin-bottom:0.75rem;">${rjHTML}</div>
+        <p style="font-size:13px;color:var(--text2);margin-bottom:1rem;line-height:1.6;">${d.opening}</p>
+        ${d.questions.map(item=>`<div style="margin-bottom:1rem;"><div class="debrief-q">${item.q}</div><div class="debrief-note"><strong>Facilitator note:</strong> ${item.note}</div></div>`).join('')}
+        <div class="divider"></div>
+        <div style="background:var(--blue-light);border-radius:var(--radius-sm);padding:0.75rem 1rem;font-size:13px;color:var(--blue-text);"><strong>Key insight:</strong> ${d.keyInsight}</div>
+      </div>`;
+    }
+  }
+  allTabs.forEach(t=>{
+    const b=document.createElement('button');b.className='tab-btn'+(t.id==='all'?' active':'');
+    b.dataset.id=t.id;b.textContent=t.label;b.onclick=()=>render(t.id);tabs.appendChild(b);
+  });
+  render('all');
+}
+
+// Init
+renderFacList();
+renderDebrief();
+renderTeamHome();
+</script>
+</body>
+</html>
